@@ -1,16 +1,16 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import UserService from '../services/user.service';
 
 class UserController {
   private userService = new UserService();
 
-  // Register user
-  public register = async (req: Request, res: Response): Promise<void> => {
+  // Registration
+  public newUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const newUser = await this.userService.registerUser(req.body);
-      res.status(201).json({ message: 'User registered successfully', user: newUser });
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
+      const user = await this.userService.newUser(req.body);
+      res.status(201).json(user);
+    } catch (error) {
+      next(error);
     }
   };
 

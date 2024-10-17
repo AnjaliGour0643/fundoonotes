@@ -1,20 +1,25 @@
 import User from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
 import { Error } from 'mongoose';
+import bcrypt from 'bcrypt'
 
 class UserService {
+  // Encrypt the password using bcrypt
+  private async hashPassword(password: string): Promise<string> {
+    const saltRounds = 10;
+    return await bcrypt.hash(password, saltRounds);
+  }
 
-  // Register a new user
-  public registerUser = async (body: IUser): Promise<IUser | null> => {
-    // Check if user already exists
+  // Create new user (Registration)
+  public newUser = async (body: IUser): Promise<IUser> => {
     const existingUser = await User.findOne({ email: body.email });
     if (existingUser) {
-      throw new Error('User already exists');  // Throw error if user exists
+      throw new Error('User already exists');
     }
 
-    // Create new user
-    const newUser = await User.create(body);
-    return newUser;
+    body.password = await this.hashPassword(body.password); // Hash the password
+    const data = await User.create(body);
+    return data;
   };
 
   // Login user

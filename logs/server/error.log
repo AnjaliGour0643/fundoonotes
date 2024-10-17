@@ -1,0 +1,11 @@
+error: 
+    status - 500 
+    message - MongooseError: User already exists
+    at UserService.<anonymous> (D:\backend_workspace\fundoonotes-demo\src\services\user.service.ts:17:13)
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\backend_workspace\fundoonotes-demo\src\services\user.service.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) 
+    url - /api/v1/users/register 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T08:09:10.558Z"}
