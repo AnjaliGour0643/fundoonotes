@@ -58,3 +58,81 @@ error:
     method - POST 
     IP - ::1
    {"timestamp":"2024-10-17T09:42:58.881Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-10-17T10:30:44.146Z"}
+info: Connected to the database. {"timestamp":"2024-10-17T10:30:44.174Z"}
+error: 
+    status - 500 
+    message - MongooseError: User not found
+    at UserService.<anonymous> (D:\backend_workspace\fundoonotes-demo\src\services\user.service.ts:34:13)
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\backend_workspace\fundoonotes-demo\src\services\user.service.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) 
+    url - /api/v1/users/login 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T10:46:30.583Z"}
+error: 
+    status - 500 
+    message - MongooseError: User not found
+    at UserService.<anonymous> (D:\backend_workspace\fundoonotes-demo\src\services\user.service.ts:34:13)
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\backend_workspace\fundoonotes-demo\src\services\user.service.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) 
+    url - /api/v1/users/login 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T10:46:46.388Z"}
+error: 
+    status - 500 
+    message - ValidationError: "firstname" length must be at least 2 characters long 
+    url - /api/v1/users/register 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T11:05:08.577Z"}
+error: 
+    status - 500 
+    message - ValidationError: "email" is not allowed to be empty 
+    url - /api/v1/users/register 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T11:05:52.144Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-10-17T11:36:12.529Z"}
+info: Connected to the database. {"timestamp":"2024-10-17T11:36:12.597Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-10-17T11:36:16.493Z"}
+info: Connected to the database. {"timestamp":"2024-10-17T11:36:16.600Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-10-17T11:36:21.080Z"}
+info: Connected to the database. {"timestamp":"2024-10-17T11:36:21.129Z"}
+info: Server started at http://localhost:3000/api/v1/ {"timestamp":"2024-10-17T11:36:25.720Z"}
+info: Connected to the database. {"timestamp":"2024-10-17T11:36:25.777Z"}
+error: 
+    status - 500 
+    message - ValidationError: "email" is not allowed to be empty 
+    url - /api/v1/users/register 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T11:36:46.544Z"}
+error: 
+    status - 500 
+    message - ValidationError: "email" is not allowed to be empty 
+    url - /api/v1/users/login 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T11:41:54.254Z"}
+error: 
+    status - 500 
+    message - ValidationError: "email" must be a valid email 
+    url - /api/v1/users/login 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T11:42:03.308Z"}
+error: 
+    status - 500 
+    message - MongooseError: User not found
+    at UserService.<anonymous> (D:\backend_workspace\fundoonotes-demo\src\services\user.service.ts:34:13)
+    at Generator.next (<anonymous>)
+    at fulfilled (D:\backend_workspace\fundoonotes-demo\src\services\user.service.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) 
+    url - /api/v1/users/login 
+    method - POST 
+    IP - ::1
+   {"timestamp":"2024-10-17T11:43:19.632Z"}

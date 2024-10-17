@@ -54,3 +54,23 @@ info: ::1 - - [17/Oct/2024:09:42:51 +0000] "POST /api/v1/users/login HTTP/1.1" 2
 
 info: ::1 - - [17/Oct/2024:09:42:58 +0000] "POST /api/v1/users/login HTTP/1.1" 500 49 "-" "PostmanRuntime/7.42.0"
 
+info: ::1 - - [17/Oct/2024:10:46:30 +0000] "POST /api/v1/users/login HTTP/1.1" 500 49 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:10:46:40 +0000] "POST /api/v1/users/login HTTP/1.1" 200 307 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:10:46:46 +0000] "POST /api/v1/users/login HTTP/1.1" 500 49 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:11:05:08 +0000] "POST /api/v1/users/register HTTP/1.1" 500 90 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:11:05:52 +0000] "POST /api/v1/users/register HTTP/1.1" 500 71 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:11:36:46 +0000] "POST /api/v1/users/register HTTP/1.1" 500 71 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:11:38:01 +0000] "POST /api/v1/users/regis HTTP/1.1" 404 47 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:11:41:54 +0000] "POST /api/v1/users/login HTTP/1.1" 500 71 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:11:42:03 +0000] "POST /api/v1/users/login HTTP/1.1" 500 66 "-" "PostmanRuntime/7.42.0"
+
+info: ::1 - - [17/Oct/2024:11:43:19 +0000] "POST /api/v1/users/login HTTP/1.1" 500 49 "-" "PostmanRuntime/7.42.0"
+
