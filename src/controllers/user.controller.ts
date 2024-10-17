@@ -14,14 +14,13 @@ class UserController {
     }
   };
 
-  // Login user
-  public login = async (req: Request, res: Response): Promise<void> => {
-    const { email, password } = req.body;
+  // Login
+  public loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await this.userService.loginUser(email, password);
+      const user = await this.userService.loginUser(req.body);
       res.status(200).json({ message: 'Login successful', user });
-    } catch (error: any) {
-      res.status(400).json({ message: error.message });
+    } catch (error) {
+      next(error);
     }
   };
 }

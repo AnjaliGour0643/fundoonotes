@@ -22,15 +22,24 @@ class UserService {
     return data;
   };
 
-  // Login user
-  public loginUser = async (email: string, password: string): Promise<IUser | null> => {
-    const user = await User.findOne({ email });
+  // Compare the entered password with the hashed password
+  private async comparePassword(enteredPassword: string, storedPassword: string): Promise<boolean> {
+    return await bcrypt.compare(enteredPassword, storedPassword);
+  }
 
-    // Check if user exists and password matches
-    if (!user || user.password !== password) {
-      throw new Error('Invalid email or password');  // Throw error if login fails
+  // Login logic
+  public loginUser = async (body: { email: string, password: string }): Promise<IUser | null> => {
+    const user = await User.findOne({ email: body.email });
+    if (!user) {
+      throw new Error('User not found');
     }
 
+    const isPasswordMatch = await this.comparePassword(body.password, user.password);
+    if (!isPasswordMatch) {
+      throw new Error('Invalid password');
+    }
+
+    // Password matches, return the user
     return user;
   };
 }
