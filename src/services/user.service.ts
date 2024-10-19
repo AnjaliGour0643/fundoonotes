@@ -1,46 +1,42 @@
 import User from '../models/user.model';
 import { IUser } from '../interfaces/user.interface';
 import { Error } from 'mongoose';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'; // Importing jwt for token generation
 
 class UserService {
-  // Encrypt the password using bcrypt
-  private async hashPassword(password: string): Promise<string> {
-    const saltRounds = 10;
-    return await bcrypt.hash(password, saltRounds);
-  }
-
-  // Create new user (Registration)
+  // Create new user (Registration) with password hashing
   public newUser = async (body: IUser): Promise<IUser> => {
     const existingUser = await User.findOne({ email: body.email });
     if (existingUser) {
       throw new Error('User already exists');
     }
 
-    body.password = await this.hashPassword(body.password); // Hash the password
+    // Hashing the password 
+    body.password = await bcrypt.hash(body.password, 10);  // 10 - saltRounds
+
     const data = await User.create(body);
     return data;
   };
 
-  // Compare the entered password with the hashed password
-  private async comparePassword(enteredPassword: string, storedPassword: string): Promise<boolean> {
-    return await bcrypt.compare(enteredPassword, storedPassword);
-  }
-
-  // Login logic
-  public loginUser = async (body: { email: string, password: string }): Promise<IUser | null> => {
+  // Login logic with JWT token generation and password comparison
+  public loginUser = async (body: { email: string, password: string }): Promise<{ token: string } | null> => {
     const user = await User.findOne({ email: body.email });
     if (!user) {
       throw new Error('User not found');
     }
 
-    const isPasswordMatch = await this.comparePassword(body.password, user.password);
+    // Password comparison logic 
+    const isPasswordMatch = await bcrypt.compare(body.password, user.password);
     if (!isPasswordMatch) {
       throw new Error('Invalid password');
     }
 
-    // Password matches, return the user
-    return user;
+    // Password matches, generate JWT token
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
+
+    // Return the token instead of the user
+    return { token };
   };
 }
 
