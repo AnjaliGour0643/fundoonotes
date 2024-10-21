@@ -41,6 +41,20 @@ class NoteService {
       throw error; // Re-throw the error to be caught in the controller
     }
   };
+
+  // Update a note by noteId
+  public updateNoteById = async (noteId: string, updateData: Partial<INote>): Promise<INote | null> => {
+    try {
+      const updatedNote = await Note.findByIdAndUpdate(noteId, updateData, { new: true });
+      if (!updatedNote) {
+        throw new Error('Note not found');
+      }
+      return updatedNote;
+    } catch (error) {
+      console.error('Error updating note:', error);
+      throw error;
+    }
+  };
   
 }
 

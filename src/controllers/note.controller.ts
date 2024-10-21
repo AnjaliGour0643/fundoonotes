@@ -56,6 +56,31 @@ class NoteController {
     }
   };
 
+  // Update a note by noteID
+  public updateNote = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const noteId = req.params.id;
+      const updateData = req.body;
+      const updatedNote = await this.noteService.updateNoteById(noteId, updateData);
+
+      if (!updatedNote) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          code: HttpStatus.NOT_FOUND,
+          message: 'Note not found',
+        });
+      }
+
+      res.status(HttpStatus.OK).json(updatedNote); // Send the updated note back to the client
+    } catch (error) {
+      console.error('Error updating note:', error);
+      next({
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error updating note',
+        error: error.message,
+      });
+    }
+  };
+
 }
 
 export default NoteController;
