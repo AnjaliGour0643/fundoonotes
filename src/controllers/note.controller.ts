@@ -40,6 +40,22 @@ class NoteController {
     }
   };
 
+  // Get all notes for the authenticated user
+  public getUserNotes = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.body.createdBy; // Get the userId from the authenticated user (set in auth middleware)
+      const notes = await this.noteService.getNotesByUserId(userId); // Fetch notes for this user
+
+      res.status(HttpStatus.OK).json(notes); 
+    } catch (error) {
+      next({
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error retrieving user notes',
+        error: error.message
+      });
+    }
+  };
+
 }
 
 export default NoteController;

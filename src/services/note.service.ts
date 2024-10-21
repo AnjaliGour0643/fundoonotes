@@ -27,6 +27,20 @@ class NoteService {
       throw error; // Re-throw the error to be caught in the controller
     }
   };
+
+  // Fetch all notes for a specific user
+  public getNotesByUserId = async (userId: string): Promise<INote[]> => {
+    try {
+      const notes = await Note.find({ createdBy: userId }); // Find all notes created by this user
+      if (!notes || notes.length === 0) {
+        throw new Error('No notes found for this user');
+      }
+      return notes;
+    } catch (error) {
+      console.error('Error retrieving notes:', error); // Log for debugging
+      throw error; // Re-throw the error to be caught in the controller
+    }
+  };
   
 }
 

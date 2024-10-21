@@ -27,6 +27,13 @@ class NoteRoutes {
       userAuth,                         
       this.noteController.getNote      
     );
+
+    // Route for getting all notes for the authenticated user
+    this.router.get(
+      '/',
+      userAuth,                        
+      this.noteController.getUserNotes 
+    );
     
   };
 
