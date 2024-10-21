@@ -81,6 +81,33 @@ class NoteController {
     }
   };
 
+  // Delete a specific note by noteId
+  public deleteNote = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const noteId = req.params.id;
+      const deletedNote = await this.noteService.deleteNoteById(noteId);
+
+      if (!deletedNote) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          code: HttpStatus.NOT_FOUND,
+          message: 'Note not found',
+        });
+      }
+
+      res.status(HttpStatus.OK).json({
+        message: 'Note deleted successfully',
+        deletedNote,
+      });
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      next({
+        code: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error deleting note',
+        error: error.message,
+      });
+    }
+  };
+
 }
 
 export default NoteController;

@@ -55,6 +55,20 @@ class NoteService {
       throw error;
     }
   };
+
+  // Delete a note by noteId
+  public deleteNoteById = async (noteId: string): Promise<INote | null> => {
+    try {
+      const deletedNote = await Note.findByIdAndDelete(noteId);
+      if (!deletedNote) {
+        throw new Error('Note not found');
+      }
+      return deletedNote;
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      throw error;
+    }
+  };
   
 }
 

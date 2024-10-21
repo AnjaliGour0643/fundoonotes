@@ -42,9 +42,16 @@ class NoteRoutes {
       userAuth,
       this.noteController.updateNote    
     );
+
+    // Route for deleting a note by noteID
+    this.router.delete(
+      '/:id', 
+      userAuth, 
+      this.noteController.deleteNote
+    );
     
   };
-  
+
   public getRoutes = (): IRouter => {
     return this.router;
   };
