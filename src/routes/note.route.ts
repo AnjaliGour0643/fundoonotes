@@ -21,6 +21,13 @@ class NoteRoutes {
       this.noteController.createNote    
     );
 
+    // Route for getting note by poviding noteID
+    this.router.get(
+      '/:id',
+      userAuth,                         
+      this.noteController.getNote      
+    );
+    
   };
 
   public getRoutes = (): IRouter => {
