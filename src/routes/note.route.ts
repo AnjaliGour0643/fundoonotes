@@ -49,6 +49,27 @@ class NoteRoutes {
       userAuth, 
       this.noteController.deleteNote
     );
+
+    // Route for toggling archive status by providing noteID
+    this.router.put(
+      '/archive/:id',
+      userAuth,                         
+      this.noteController.toggleArchive // Toggle archive status here
+    );
+
+    // Route to toggle trash status (move to trash or restore)
+    this.router.put(
+      '/trash/:id', 
+      userAuth, 
+      this.noteController.toggleTrash
+    );
+
+    // Route to permanently delete a note (only if it's in trash)
+    this.router.delete(
+      '/deletePermanently/:id', 
+      userAuth, 
+      this.noteController.deletePermanently
+    );
     
   };
 
