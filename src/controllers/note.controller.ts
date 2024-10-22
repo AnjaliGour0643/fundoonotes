@@ -20,8 +20,8 @@ class NoteController {
   public getNote = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const noteId = req.params.id; 
-      const note = await this.noteService.getNoteById(noteId); 
-  
+      const userId = req.body.createdBy;
+      const note = await this.noteService.getNoteById(noteId,userId); 
       if (!note) {
         return res.status(HttpStatus.NOT_FOUND).json({
           code: HttpStatus.NOT_FOUND,
@@ -60,13 +60,14 @@ class NoteController {
   public updateNote = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const noteId = req.params.id;
+      const userId = req.body.createdBy;
       const updateData = req.body;
-      const updatedNote = await this.noteService.updateNoteById(noteId, updateData);
+      const updatedNote = await this.noteService.updateNoteById(noteId,userId, updateData);
 
       if (!updatedNote) {
         return res.status(HttpStatus.NOT_FOUND).json({
           code: HttpStatus.NOT_FOUND,
-          message: 'Note not found',
+          message: 'Note not found or unauthorized',
         });
       }
 
@@ -85,7 +86,8 @@ class NoteController {
   public deleteNote = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const noteId = req.params.id;
-      const deletedNote = await this.noteService.deleteNoteById(noteId);
+      const userId = req.body.createdBy;
+      const deletedNote = await this.noteService.deleteNoteById(noteId, userId);
 
       if (!deletedNote) {
         return res.status(HttpStatus.NOT_FOUND).json({

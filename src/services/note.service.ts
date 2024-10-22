@@ -14,10 +14,10 @@ class NoteService {
     }
   };
   
-  // Fetch specific note for a specific user
-  public getNoteById = async (noteId: string): Promise<INote | null> => {
+  // Fetch specific note for a specific user by providing noteId
+  public getNoteById = async (noteId: string, userId:any): Promise<INote | null> => {
     try {
-      const note = await Note.findById(noteId); 
+      const note = await Note.findOne({$and: [{_id:noteId}, {createdBy:userId }]}); 
       if (!note) {
         throw new Error('Note not found'); 
       }
@@ -42,31 +42,38 @@ class NoteService {
     }
   };
 
-  // Update a note by noteId
-  public updateNoteById = async (noteId: string, updateData: Partial<INote>): Promise<INote | null> => {
+  // Update specific note for a specific user by providing noteId
+  public updateNoteById = async (noteId: string, userId: any, updatedData: any): Promise<INote | null> => {
     try {
-      const updatedNote = await Note.findByIdAndUpdate(noteId, updateData, { new: true });
-      if (!updatedNote) {
-        throw new Error('Note not found');
+      const note = await Note.findOneAndUpdate(
+        { _id: noteId, createdBy: userId }, // Ensure the note belongs to the user
+        { $set: updatedData }, // Update the note with new data
+        { new: true } // Return the updated document
+      );
+      
+      if (!note) {
+        throw new Error('Note not found or unauthorized'); 
       }
-      return updatedNote;
+      
+      return note;
     } catch (error) {
-      console.error('Error updating note:', error);
-      throw error;
+      console.error('Error in updateNoteById:', error); 
+      throw error; 
     }
   };
 
   // Delete a note by noteId
-  public deleteNoteById = async (noteId: string): Promise<INote | null> => {
+  public deleteNoteById = async (noteId: string, userId: any): Promise<INote | null> => {
     try {
-      const deletedNote = await Note.findByIdAndDelete(noteId);
-      if (!deletedNote) {
-        throw new Error('Note not found');
+      const note = await Note.findOneAndDelete({ _id: noteId, createdBy: userId }); // Ensure the note belongs to the user
+      if (!note) {
+        throw new Error('Note not found or unauthorized'); 
       }
-      return deletedNote;
+      
+      return note; // Return the deleted note
     } catch (error) {
-      console.error('Error deleting note:', error);
-      throw error;
+      console.error('Error in deleteNoteById:', error); 
+      throw error; 
     }
   };
   
