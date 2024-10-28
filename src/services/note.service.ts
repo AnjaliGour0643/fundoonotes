@@ -62,22 +62,6 @@ class NoteService {
     }
   };
 
-  // Delete a note by noteId
-  public deleteNoteById = async (noteId: string, userId: any): Promise<INote | null> => {
-    try {
-      const note = await Note.findOneAndDelete({ _id: noteId, createdBy: userId }); // Ensure the note belongs to the user
-      if (!note) {
-        throw new Error('Note not found or unauthorized'); 
-      }
-      
-      return note; // Return the deleted note
-    } catch (error) {
-      console.error('Error in deleteNoteById:', error); 
-      throw error; 
-    }
-  };
-
-
   // Toggle archive status for a note
   public toggleArchive = async (noteId: string, userId: any): Promise<INote | null> => {
     try {

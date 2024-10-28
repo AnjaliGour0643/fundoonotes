@@ -43,13 +43,6 @@ class NoteRoutes {
       this.noteController.updateNote    
     );
 
-    // Route for deleting a note by noteID
-    this.router.delete(
-      '/:id', 
-      userAuth, 
-      this.noteController.deleteNote
-    );
-
     // Route for toggling archive status by providing noteID
     this.router.put(
       '/archive/:id',
