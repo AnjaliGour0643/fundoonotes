@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8000/api/v1"
+      "url": "http://localhost:3000/api/v1"
     }
   ],
   "tags": [
@@ -77,6 +77,87 @@
         }
       }
     },
+    "/users/forgot-password": {
+    "post": {
+      "tags": ["User"],
+      "summary": "Send password reset token to user's email",
+      "requestBody": {
+        "description": "Email of the user requesting password reset",
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": ["email"]
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Password reset token sent successfully"
+        },
+        "404": {
+          "description": "User not found"
+        },
+        "500": {
+          "description": "Internal Server Error"
+        }
+      }
+    }
+  },
+  "/users/reset-password": {
+    "post": {
+      "tags": ["User"],
+      "summary": "Reset the user's password using the token",
+      "requestBody": {
+        "description": "New password and the reset token",
+        "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "newPassword": {
+                  "type": "string"
+                }
+              },
+              "required": ["newPassword"]
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Password reset successfully"
+        },
+        "400": {
+          "description": "Invalid input"
+        },
+        "404": {
+          "description": "Token is invalid or expired"
+        },
+        "500": {
+          "description": "Internal Server Error"
+        }
+      },
+      "security": [
+    {
+      "BearerAuth": []
+    }
+  ]
+    }
+  },
     "/notes/create": {
       "post": {
         "tags": ["Notes"],
@@ -184,7 +265,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Note"
+                "$ref": "#/components/schemas/UpdateNote"
               }
             }
           }
@@ -312,10 +393,10 @@
       "User": {
         "type": "object",
         "properties": {
-          "firstName": {
+          "firstname": {
             "type": "string"
           },
-          "lastName": {
+          "lastname": {
             "type": "string"
           },
           "email": {
@@ -354,13 +435,30 @@
           },
           "isTrash": {
             "type": "boolean"
-          },
-          "createdBy": {
-            "type": "string"
           }
 
         },
-        "required": ["title", "description", "createdBy"]
+        "required": ["title", "description"]
+      },
+      "UpdateNote": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "isArchive": {
+            "type": "boolean"
+          },
+          "isTrash": {
+            "type": "boolean"
+          }
+        }
       }
     },
     "securitySchemes": {

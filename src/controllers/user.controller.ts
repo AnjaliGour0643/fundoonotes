@@ -26,6 +26,31 @@ class UserController {
       next(error); // Pass the error to the middleware for handling
     }
   };
+
+  // Forgot password
+  public forgotPassword = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try { 
+      await this.userService.forgotPassword(req.body.email);
+      res.status(HttpStatus.CREATED).send("Reset password token sent to registered email id");
+    } catch (error) {
+        next(error);
+    }
+  };
+
+  //Reset Password
+  public resetPassword = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+    try {
+      await this.userService.resetPassword(req.body, res.locals.id);
+
+      res.status(HttpStatus.OK).json({
+        code: HttpStatus.OK,
+        message: 'Password reset successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+  
 }
 
 export default UserController;

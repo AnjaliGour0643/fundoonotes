@@ -1,6 +1,7 @@
 import express, { IRouter } from 'express';
 import UserController from '../controllers/user.controller';
 import UserValidator from '../validators/user.validator';
+import { userAuth} from '../middlewares/auth.middleware';
 
 class UserRoutes {
   private router = express.Router();
@@ -25,6 +26,21 @@ class UserRoutes {
       '/login',
       this.userValidator.loginUser,
       this.userController.loginUser
+    );
+
+    // Forgot Password
+    this.router.post(
+      '/forgot-password', 
+      this.userValidator.validateForgotPassword,
+      this.userController.forgotPassword
+    );
+
+    // Reset Password
+    this.router.post(
+      '/reset-password', 
+      this.userValidator.validateResetPassword,
+      userAuth('reset'),
+      this.userController.resetPassword
     );
   };
 

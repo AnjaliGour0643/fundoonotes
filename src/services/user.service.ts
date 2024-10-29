@@ -3,6 +3,7 @@ import { IUser } from '../interfaces/user.interface';
 import { Error } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'; // Importing jwt for token generation
+import { sendEmail } from '../utils/user.util';
 
 class UserService {
   // Create new user (Registration) with password hashing
@@ -38,6 +39,30 @@ class UserService {
     // Return the token instead of the user
     return { token };
   };
+
+  //forgot password
+  public forgotPassword = async (email: any) => {
+    try{
+      const temp = await User.findOne({email});
+      if(!temp)
+        throw new Error("Email not found")
+      const token = jwt.sign({userId: temp._id}, process.env.JWT_FORGOTPASSWORD, { expiresIn: '1h' })
+      await sendEmail(email, token)
+    }catch(error){
+      throw new Error("Error occured cannot send email: "+error)
+    }
+  }
+
+  //reset password
+  public resetPassword = async (body: any, userId): Promise<void> => {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const hashedPassword = await bcrypt.hash(body.newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+  };
 }
 
 export default UserService;
