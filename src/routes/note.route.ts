@@ -2,6 +2,7 @@ import express, { IRouter } from 'express';
 import NoteController from '../controllers/note.controller';
 import NoteValidator from '../validators/note.validator';
 import { userAuth } from '../middlewares/auth.middleware';
+import { cacheNotesByUserId } from '../middlewares/redis.middleware';
 
 class NoteRoutes {
   private router = express.Router();
@@ -31,7 +32,8 @@ class NoteRoutes {
     // Route for getting all notes for the authenticated user
     this.router.get(
       '/',
-      userAuth('auth'),                        
+      userAuth('auth'), 
+      cacheNotesByUserId,                      
       this.noteController.getUserNotes 
     );
     

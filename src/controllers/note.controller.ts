@@ -44,9 +44,10 @@ class NoteController {
   public getUserNotes = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.body.createdBy; // Get the userId from the authenticated user (set in auth middleware)
-      const notes = await this.noteService.getNotesByUserId(userId); // Fetch notes for this user
-
-      res.status(HttpStatus.OK).json(notes); 
+      const { data: notes, source } = await this.noteService.getNotesByUserId(userId); // Fetch notes with source info
+  
+      // Send notes along with source message
+      res.status(HttpStatus.OK).json({ message: source, notes });
     } catch (error) {
       next({
         code: HttpStatus.INTERNAL_SERVER_ERROR,
