@@ -4,6 +4,7 @@ import { Error } from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'; // Importing jwt for token generation
 import { sendEmail } from '../utils/user.util';
+import { createChannel } from '../utils/rabbitmq';
 
 class UserService {
   // Create new user (Registration) with password hashing
@@ -17,8 +18,21 @@ class UserService {
     body.password = await bcrypt.hash(body.password, 10);  // 10 - saltRounds
 
     const data = await User.create(body);
+
+    // Send message to RabbitMQ after successful registration
+    const message = { fname: data.firstname, lname: data.lastname, email: data.email };
+    await this.sendMessageToQueue(process.env.REGISTRATION_QUEUE, message);
+
     return data;
   };
+
+  // Function to send message to RabbitMQ
+  private async sendMessageToQueue(queueName: string, message: any) {
+    const channel = await createChannel();
+    await channel.assertQueue(queueName, { durable: true });
+    channel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
+    console.log('Sent message to queue:', queueName, message);
+  }
 
   // Login logic with JWT token generation and password comparison
   public loginUser = async (body: { email: string, password: string }): Promise<{ token: string } | null> => {
