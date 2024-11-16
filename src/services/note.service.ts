@@ -16,16 +16,15 @@ class NoteService {
   };
   
   // Fetch specific note for a specific user by providing noteId
-  public getNoteById = async (noteId: string, userId:any): Promise<INote | null> => {
+  public getNoteById = async (noteId: string, userId: any): Promise<INote | null> => {
     try {
-      const note = await Note.findOne({$and: [{_id:noteId}, {createdBy:userId }]}); 
+      const note = await Note.findOne({ _id: noteId, createdBy: userId }); 
       if (!note) {
-        throw new Error('Note not found'); 
+        throw new Error('Note not found or user not authorized');
       }
-      return note;
+      return note; // Return the full note details
     } catch (error) {
-      console.error('Error in getNoteById:', error); // Log for debugging
-      throw error; // Re-throw the error to be caught in the controller
+      throw error; // Re-throw the error to be handled by the controller
     }
   };
 
@@ -43,7 +42,6 @@ class NoteService {
       // Return notes with a source message
       return { data: notes, source: 'Data retrieved from database' };
     } catch (error) {
-      console.error('Error retrieving notes:', error);
       throw error;
     }
   };
@@ -66,35 +64,29 @@ class NoteService {
       
       return note;
     } catch (error) {
-      console.error('Error in updateNoteById:', error); 
       throw error; 
     }
   };
 
-  // Toggle archive status for a note
-  public toggleArchive = async (noteId: string, userId: any): Promise<INote | null> => {
+  // Permanently delete a note (only if it's in trash)
+  public deletePermanently = async (noteId: string, userId: any): Promise<boolean> => {
     try {
-      // Find the note by ID and userId (createdBy)
-      const note = await Note.findOne({$and: [{ _id: noteId }, { createdBy: userId }, { isTrash: false }]}); 
-      
+      const note = await Note.findOne({$and: [{ _id: noteId }, { createdBy: userId }, { isTrash: true }]}); // Only allow delete if in trash
+
       if (!note) {
-        throw new Error('Note not found or user not authorized'); 
+        throw new Error('Note not found or not authorized');
       }
+
+      await Note.findByIdAndDelete(noteId); // Delete the note from the database
       
-      // Toggle the isArchive field
-      note.isArchive = !note.isArchive; 
-      await note.save();
-
-      // Invalidate cache
+      // Invalidate the cached notes for this user in Redis
       await redisClient.del(`notes:${userId}`);
-
-      return note;
+      
+      return true; // Successfully deleted
     } catch (error) {
-      console.error('Error in toggleArchive:', error); 
       throw error; // Re-throw the error to be caught in the controller
     }
   };
-
 
   // Toggle trash status for a note (move to trash or restore)
   public toggleTrash = async (noteId: string, userId: any): Promise<INote | null> => {
@@ -117,28 +109,29 @@ class NoteService {
 
       return note;
     } catch (error) {
-      console.error('Error in toggleTrash:', error);
       throw error; // Re-throw the error to be caught in the controller
     }
   };
 
-  // Permanently delete a note (only if it's in trash)
-  public deletePermanently = async (noteId: string, userId: any): Promise<boolean> => {
+  // Toggle archive status for a note
+  public toggleArchive = async (noteId: string, userId: any): Promise<INote | null> => {
     try {
-      const note = await Note.findOne({$and: [{ _id: noteId }, { createdBy: userId }, { isTrash: true }]}); // Only allow delete if in trash
-
+      // Find the note by ID and userId (createdBy)
+      const note = await Note.findOne({$and: [{ _id: noteId }, { createdBy: userId }, { isTrash: false }]}); 
+      
       if (!note) {
-        throw new Error('Note not found or not authorized');
+        throw new Error('Note not found or user not authorized'); 
       }
+      
+      // Toggle the isArchive field
+      note.isArchive = !note.isArchive; 
+      await note.save();
 
-      await Note.findByIdAndDelete(noteId); // Delete the note from the database
-      
-      // Invalidate the cached notes for this user in Redis
+      // Invalidate cache
       await redisClient.del(`notes:${userId}`);
-      
-      return true; // Successfully deleted
+
+      return note;
     } catch (error) {
-      console.error('Error in deletePermanently:', error);
       throw error; // Re-throw the error to be caught in the controller
     }
   };

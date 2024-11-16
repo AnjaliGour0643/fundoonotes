@@ -9,8 +9,14 @@ class UserController {
   public newUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = await this.userService.newUser(req.body);
-      // Successful registration response
-      res.status(HttpStatus.CREATED).json(user); // Using status code from http-status-codes
+  
+      // Check if the user creation succeeded
+      if (user) {
+        res.status(HttpStatus.CREATED).json({
+          code: HttpStatus.CREATED,
+          message: 'User registered successfully',
+        });
+      }
     } catch (error) {
       next(error); // Pass the error to the middleware for handling
     }
@@ -20,10 +26,20 @@ class UserController {
   public loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = await this.userService.loginUser(req.body);
-      // Successful login response
-      res.status(HttpStatus.OK).json({ message: 'Login successful', user }); // Using status code from http-status-codes
+      
+      // Check if the login succeeded
+      if (user) {
+        res.status(HttpStatus.OK).json({
+          code: HttpStatus.OK,
+          message: 'Login successful',
+          user,
+        });
+      } 
     } catch (error) {
-      next(error); // Pass the error to the middleware for handling
+      res.status(HttpStatus.UNAUTHORIZED).send({
+        code: HttpStatus.UNAUTHORIZED,
+        message : error.message
+      });
     }
   };
 
@@ -31,9 +47,15 @@ class UserController {
   public forgotPassword = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     try { 
       await this.userService.forgotPassword(req.body.email);
-      res.status(HttpStatus.CREATED).send("Reset password token sent to registered email id");
+      res.status(HttpStatus.CREATED).json({
+        code : HttpStatus.CREATED,
+        message: "Reset password token sent to registered email id"
+      });
     } catch (error) {
-        next(error);
+      res.status(HttpStatus.NOT_FOUND).send({
+        code: HttpStatus.NOT_FOUND,
+        message : error.message
+      });
     }
   };
 
@@ -47,8 +69,11 @@ class UserController {
         message: 'Password reset successfully',
       });
     } catch (error) {
-      next(error);
-    }
+      res.status(HttpStatus.UNAUTHORIZED).send({
+        code: HttpStatus.UNAUTHORIZED,
+        message : error.message
+      });
+    }
   };
   
 }

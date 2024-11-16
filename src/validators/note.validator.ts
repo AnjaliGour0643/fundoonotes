@@ -1,5 +1,6 @@
 import Joi from '@hapi/joi';
 import { Request, Response, NextFunction } from 'express';
+import HttpStatus from 'http-status-codes';
 
 class NoteValidator {
   // Validation for creating a new note
@@ -8,12 +9,15 @@ class NoteValidator {
       title: Joi.string().min(1).required(), 
       description: Joi.string().min(1).required(), 
       color: Joi.string().optional(), 
-      isArchive: Joi.boolean().required(), 
-      isTrash: Joi.boolean().required(), 
+      isArchive: Joi.boolean().optional(), 
+      isTrash: Joi.boolean().optional() 
     });
     const { error } = schema.validate(req.body);
     if (error) {
-      next(error);
+      res.status(HttpStatus.BAD_REQUEST).send({
+        code: HttpStatus.BAD_REQUEST,
+        message : error.message
+      }); 
     }
     next();
   };

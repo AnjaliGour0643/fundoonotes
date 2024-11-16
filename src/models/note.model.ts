@@ -7,7 +7,7 @@ const NoteSchema: Schema = new Schema({
   color: { type: String, default: '#ffffff' }, // Optional field with default
   isArchive: { type: Boolean, default: false },
   isTrash: { type: Boolean, default: false },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to User collection
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Reference to User collection
 }, {
   timestamps: true, 
 });

@@ -9,7 +9,7 @@ import swaggerDocument from '../swagger/openapi.json'
 
 const routes = (): IRouter => {
   router.get('/', (req, res) => {
-    res.json('Welcome');
+    res.json('Welcome to the API');
   });
 
   // Use the user routes for registration and login
