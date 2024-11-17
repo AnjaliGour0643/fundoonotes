@@ -33,7 +33,10 @@ class NoteValidator {
     });
     const { error } = schema.validate(req.body);
     if (error) {
-      return next(error);
+      res.status(HttpStatus.BAD_REQUEST).send({
+        code: HttpStatus.BAD_REQUEST,
+        message : error.message
+      }); 
     }
     next();
   };

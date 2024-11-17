@@ -1,5 +1,6 @@
 import Joi from '@hapi/joi';
 import { Request, Response, NextFunction } from 'express';
+import HttpStatus from 'http-status-codes';
 
 class UserValidator {
   // Validation for new user registration
@@ -12,7 +13,10 @@ class UserValidator {
     });
     const { error } = schema.validate(req.body);
     if (error) {
-      next(error);
+      res.status(HttpStatus.BAD_REQUEST).send({
+        code: HttpStatus.BAD_REQUEST,
+        message : error.message
+      });
     }
     next();
   };
@@ -25,7 +29,10 @@ class UserValidator {
     });
     const { error } = schema.validate(req.body);
     if (error) {
-      next(error);
+      res.status(HttpStatus.UNAUTHORIZED).send({
+        code: HttpStatus.UNAUTHORIZED,
+        message : error.message
+      });
     }
     next();
   };

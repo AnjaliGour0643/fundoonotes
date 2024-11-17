@@ -54,7 +54,7 @@ class UserController {
     } catch (error) {
       res.status(HttpStatus.NOT_FOUND).send({
         code: HttpStatus.NOT_FOUND,
-        message : error.message
+        message : 'User not found'
       });
     }
   };

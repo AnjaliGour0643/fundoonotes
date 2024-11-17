@@ -100,15 +100,15 @@ class NoteController {
       }
 
       res.status(HttpStatus.OK).json({
+        code : HttpStatus.OK,
         message: 'Note permanently deleted',
         deletedNoteId: noteId
       });
     } catch (error) {
-      console.error('Error deleting note permanently:', error);
-      next({
+      res.status(HttpStatus.FORBIDDEN).send({
         code: HttpStatus.FORBIDDEN,
         message: 'Error deleting note permanently',
-      });
+      })
     }
   };
 
