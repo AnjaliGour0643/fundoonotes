@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import redisClient from '../config/redis';
 import Logger from '../config/logger';
+import HttpStatus from 'http-status-codes';
 
 const logger = Logger.logger;
 
@@ -11,9 +12,9 @@ export const cacheNotesByUserId = async (req: Request, res: Response, next: Next
     const cachedNotes = await redisClient.get(`notes:${userId}`);
     if (cachedNotes) {
       logger.info('Fetching notes from Redis cache');
-      return res.status(200).json({ 
+      return res.status(HttpStatus.CREATED).json({ 
         message: 'Data retrieved from Redis cache', 
-        notes: JSON.parse(cachedNotes)
+        notes : await JSON.parse(cachedNotes)
       });
     }
     next();

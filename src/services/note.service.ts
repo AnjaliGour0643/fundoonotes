@@ -71,7 +71,7 @@ class NoteService {
   // Permanently delete a note (only if it's in trash)
   public deletePermanently = async (noteId: string, userId: any): Promise<boolean> => {
     try {
-      const note = await Note.findOne({$and: [{ _id: noteId }, { createdBy: userId }, { isTrash: true }]}); // Only allow delete if in trash
+      const note = await Note.findOne({ _id: noteId , createdBy: userId , isTrash: true }); // Only allow delete if in trash
 
       if (!note) {
         throw new Error('Note not found or not authorized');
@@ -91,7 +91,7 @@ class NoteService {
   // Toggle trash status for a note (move to trash or restore)
   public toggleTrash = async (noteId: string, userId: any): Promise<INote | null> => {
     try {
-      const note = await Note.findOne({ $and: [{ _id: noteId }, { createdBy: userId }]});
+      const note = await Note.findOne({ _id: noteId, createdBy: userId });
 
       if (!note) {
         throw new Error('Note not found or user not authorized');
@@ -117,7 +117,7 @@ class NoteService {
   public toggleArchive = async (noteId: string, userId: any): Promise<INote | null> => {
     try {
       // Find the note by ID and userId (createdBy)
-      const note = await Note.findOne({$and: [{ _id: noteId }, { createdBy: userId }, { isTrash: false }]}); 
+      const note = await Note.findOne({ _id: noteId , createdBy: userId , isTrash: false }); 
       
       if (!note) {
         throw new Error('Note not found or user not authorized'); 
