@@ -20,7 +20,7 @@ const sendEmail = async (to: string, token: string) => {
       name: 'fundoonotes',
       address: process.env.EMAIL_USER,
     },
-    to: ["anjaligour1306@gmail.com"],
+    to: [to],
     subject: "Password Reset Token",
     html: `<p>Your password reset token is:</p><p><strong>${token}</strong></p>`,
   };

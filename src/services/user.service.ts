@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'; // Importing jwt for token generation
 import { sendEmail } from '../utils/user.util';
 import { createChannel } from '../utils/rabbitmq';
+import { log } from 'winston';
 
 class UserService {
   // Create new user (Registration) with password hashing
@@ -35,8 +36,9 @@ class UserService {
   }
 
   // Login logic with JWT token generation and password comparison
-  public loginUser = async (body: { email: string, password: string }): Promise<{ token: string } | null> => {
+  public loginUser = async (body: { email: string, password: string }): Promise<any | null> => {
     const user = await User.findOne({ email: body.email });
+    console.log(user)
     if (!user) {
       throw new Error('User not found');
     }
@@ -51,7 +53,7 @@ class UserService {
     const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET);
 
     // Return the token instead of the user
-    return { token };
+    return { email: user.email, firstname: user.firstname, token: token };
   };
 
   //forgot password
